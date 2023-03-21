@@ -8,6 +8,7 @@ streamlit = "*"
 plotly = "*"
 pandas = "*"
 duckdb = "*"
+numpy = "*"
 
 [dev-packages]
 
