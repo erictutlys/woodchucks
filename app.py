@@ -30,9 +30,9 @@ with st.expander("Advanced settings"):
 
 
 latest = duckdb.query("""
-    SELECT 
-        state, 
-        0 as day, 
+    SELECT
+        state,
+        0 as day,
         case when state = '{}' then {} else 0 end as population 
     FROM states
     """.format(starting_state, starting_number)).to_df()
@@ -54,7 +54,7 @@ def simulation(df, day):
                 end
                 ) as population,
         FROM df 
-            left join 
+            left join
                 (
                     select
                         n1.state_neighbor as state
@@ -74,14 +74,14 @@ def simulation(df, day):
                         d.population > 20
                     group by 1
                 ) -- States that are neighboring a state with n>50
-                 n on 
+                 n on
                 n.state = df.state
         group by 1,2
         """.format(new_day, spread_threshold, reproduction_rate, random_factor)).to_df()
     return new_day_data
 
 
-days = col3.number_input('Days to Simulate', min_value = 10, value=10, step = 10)
+days = col3.number_input('Days to Simulate', min_value=10, value=10, step=10)
 
 if st.button('Run Simulation'):
     for i in range(0, days):
@@ -102,14 +102,14 @@ if st.button('Run Simulation'):
 else:
     st.stop()
 
-animated_viz = px.choropleth(latest, 
+animated_viz = px.choropleth(latest,
               locations = 'state',
               color="population", 
               animation_frame="day",
               color_continuous_scale="Earth",
               locationmode='USA-states',
               scope="usa",
-              range_color=(0, 100), # latest['population'].max()*1.1),
+              range_color=(0, 1000),  # latest['population'].max()*1.1),
               title='Woodchucks over time',
               height=600
              )
