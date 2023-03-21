@@ -40,14 +40,14 @@ latest = duckdb.query("""
 
 def simulation(df, day):
     new_day = day + 1
-    random_factor = random.randint(100, 200) * 1.0 / 100
+    random_factor = random.randint(85, 110) * 1.0 / 100
     new_day_data = duckdb.query("""
         SELECT 
             df.state, 
             {0} as day,
             max(
                 case 
-                    when n.state is not null and df.population = 0 then {1}
+                    when n.state is not null and df.population = 0 then 10
                     when n.state is not null and df.population > 0 and df.population < 1000 then cast(population * {2} * {3} as int)
                     when n.state is null and df.population < 1000 then cast(df.population * {2} as int)
                     else df.population
